@@ -1,11 +1,15 @@
+from typing import List, Dict, Union
+
 from .database_connection import DatabaseConnection
 
 """
 Concerned with retrieving and storing books from a SQLite database.
 """
 
+Book = Dict[str, Union[str, int]]
 
-def create_book_table():
+
+def create_book_table() -> None:
     """Connects to the SQLite database and creates the table."""
     with DatabaseConnection('data.db') as connection:
         cursor = connection.cursor()
@@ -13,7 +17,7 @@ def create_book_table():
         cursor.execute('CREATE TABLE IF NOT EXISTS books(name text primary key, author text , read integer)')
 
 
-def add_book(name, author):
+def add_book(name: str, author: str) -> None:
     """Adds a book to the database."""
     with DatabaseConnection('data.db') as connection:
         cursor = connection.cursor()
@@ -21,7 +25,7 @@ def add_book(name, author):
         cursor.execute('INSERT INTO books VALUES(?, ?, 0)', (name, author))
 
 
-def get_all_books():
+def get_all_books() -> List[Book]:
     """Retrieves all books from the database."""
     with DatabaseConnection('data.db') as connection:
         cursor = connection.cursor()
@@ -31,7 +35,7 @@ def get_all_books():
     return books
 
 
-def read_book(name):
+def read_book(name: str) -> None:
     """Marks a book as read."""
     with DatabaseConnection('data.db') as connection:
         cursor = connection.cursor()
@@ -39,7 +43,7 @@ def read_book(name):
         cursor.execute('UPDATE books SET read=1 WHERE name=?', (name,))
 
 
-def delete_book(name):
+def delete_book(name: str) -> None:
     """Deletes a book from the database."""
     with DatabaseConnection('data.db') as connection:
         cursor = connection.cursor()
